@@ -12,7 +12,7 @@ const UserGeography = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/geo/geography`);
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}geo/geography`);
         const countryCounts = response.data.reduce((acc, customer) => {
           const country = customer.country.toLowerCase();
           acc[country] = (acc[country] || 0) + 1; // Increase count for each country

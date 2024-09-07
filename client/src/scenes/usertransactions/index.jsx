@@ -23,7 +23,7 @@ const Index = () => {
 
   const fetchTransactions = async () => {
     try {
-      const { data } = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/transactions`, {
+      const { data } = await axios.get(`${process.env.REACT_APP_BASE_URL}api/transactions`, {
         params: { page, pageSize, sort: JSON.stringify(sort), search },
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -38,7 +38,7 @@ const Index = () => {
 
   const handleDelete = async (_id) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BASE_URL}/api/transactions/${_id}`, {
+      await axios.delete(`${process.env.REACT_APP_BASE_URL}api/transactions/${_id}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },

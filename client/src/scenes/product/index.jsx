@@ -21,7 +21,7 @@ const Index = () => {
 
   useEffect(() => {
     if (token) {
-      axios.get(`${process.env.REACT_APP_BASE_URL}/products/getProducts`, {
+      axios.get(`${process.env.REACT_APP_BASE_URL}products/getProducts`, {
         headers: { Authorization: `Bearer ${token}` }
       })
         .then(res => setProducts(res.data))
@@ -30,7 +30,7 @@ const Index = () => {
   }, [token]);
 
   const deleteProduct = (productName) => {
-    axios.post(`${process.env.REACT_APP_BASE_URL}/products/deleteProduct`, { name: productName }, {
+    axios.post(`${process.env.REACT_APP_BASE_URL}products/deleteProduct`, { name: productName }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => setProducts(products.filter(p => p.name !== productName)))

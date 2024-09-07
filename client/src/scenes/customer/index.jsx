@@ -37,7 +37,7 @@ const Index = () => {
     const fetchData = async () => {
         try {
             const token = localStorage.getItem('token'); // Get token from local storage or wherever it's stored
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/customers/getcustomers`, {
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}customers/getcustomers`, {
                 headers: { Authorization: `Bearer ${token}` }
             });            
             setData(response.data);
@@ -50,7 +50,7 @@ const Index = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`${process.env.REACT_APP_BASE_URL}/customers/delete/${id}`, {
+            await axios.delete(`${process.env.REACT_APP_BASE_URL}customers/delete/${id}`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
             setData(data.filter((row) => row._id !== id));
