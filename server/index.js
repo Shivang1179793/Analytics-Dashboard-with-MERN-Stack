@@ -11,6 +11,12 @@ import managementRoutes from "./routes/management.js";
 import salesRoutes from "./routes/sales.js";
 import OverallStat from "./models/OverallStat.js";
 import AffiliateStat from "./models/AffiliateStat.js";
+import userRoutes from "./routes/registration.js";
+import authRoutes from "./routes/auth.js";
+import userProducts from "./routes/AccountProduct.js";
+import userCustomer from "./routes/AccountCustomer.js";
+import userTransaction from "./routes/AccountTransaction.js";
+import userGeography from "./routes/AccountGeography.js";
 // data imports
 import User from "./models/User.js";
 import Product from "./models/Product.js";
@@ -27,13 +33,18 @@ app.use(morgan("common"))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors());
-
+app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use('/products', userProducts);
+app.use('/customers', userCustomer);
+app.use('/api', userTransaction);
+app.use('/geo', userGeography);
 // ROUTES
 app.use("/client", clientRoutes);
 app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
-// Mongoose setup
+// Mongoose setup 
 const PORT = process.env.PORT || 9000;
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,

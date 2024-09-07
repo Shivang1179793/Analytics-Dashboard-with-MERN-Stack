@@ -16,6 +16,18 @@ import Monthly from "scenes/monthly";
 import Breakdown from "scenes/breakdown";
 import Admin from "scenes/admin"
 import Performance from "scenes/performance";
+import Login from "scenes/login";
+import Signup from "scenes/Signup";
+import Main from "scenes/product";
+import Layouts from "scenes/layouts";
+import Logout from "scenes/logout";
+import Product from "./scenes/product";
+import AddProduct from "scenes/product/add";
+import AddCustomer from "scenes/customer/form";
+import Customerss from "scenes/customer/index";
+import Index from "scenes/usertransactions/index";
+import AddTransaction from "scenes/usertransactions/add";
+import UserGeography from "scenes/usergeography";
 function App() {
   const mode = useSelector((state) => state.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -26,8 +38,26 @@ function App() {
           <CssBaseline />
           <Routes>
             {/* layout for not removing an navbar and sidebar */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route element={<Layouts />}>
+              <Route path="/admin/dashboard" element={<Main />} />
+              <Route path="/admin/logout" element={<Logout />} />
+              <Route path="/admin/products" element={<Product />} />
+              <Route path="/add-product" element={<AddProduct />} />
+              <Route path="/addcustomers" element={<AddCustomer />} />
+              <Route path="/addtransaction" element={<AddTransaction />} />
+              <Route path="/admin/customers" element={<Customerss />} />
+              <Route path="/admin/transactions" element={<Index />} />
+              <Route path="/admin/geography" element={<UserGeography />} />
+              <Route path="/admin/overview" element={<Main />} />
+              <Route path="/admin/daily" element={<Main />} />
+              <Route path="/admin/monthly" element={<Main />} />
+              <Route path="/admin/breakdown" element={<Main />} />
+            </Route>
             <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/admin/dashboard" element={<Main />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/products" element={<Products />} />
               <Route path="/customers" element={<Customers />} />

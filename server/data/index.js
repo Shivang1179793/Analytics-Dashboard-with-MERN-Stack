@@ -17305,7 +17305,6 @@ export const dataTransaction = [
     ],
   },
 ];
-
 export const dataUser = [
   {
     _id: "63701cc1f03239c72c00017f",

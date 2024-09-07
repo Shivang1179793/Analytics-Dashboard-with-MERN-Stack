@@ -73,7 +73,6 @@ const Customers = () => {
                     color:`${theme.palette.secondary[200]} !important`,
                 }
             }}>
-
                 <DataGrid loading={isLoading || !data}
                     getRowId={(row)=>row._id}
                     rows={data || []}
@@ -83,5 +82,4 @@ const Customers = () => {
         </Box>
     );
 }
-
 export default Customers;

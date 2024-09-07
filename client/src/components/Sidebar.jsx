@@ -1,4 +1,4 @@
-import React from 'react';
+import {React, useEffect, useState } from 'react';
 import {
     Box,
     Divider,
@@ -26,16 +26,34 @@ import {
     CalendarMonthOutlined,
     AdminPanelSettingsOutlined,
     TrendingUpOutlined,
-    PieChartOutlined
+    PieChartOutlined,
+    Login
 } from "@mui/icons-material";
-import {useEffect,useState} from "react";
 import {useLocation,useNavigate} from "react-router-dom";
 import FlexBetween from './FlexBetween';
 import profileImage from 'assets/profile.jpeg';
+const Sidebar = ({
+  user,
+  drawerWidth,
+  isSidebarOpen,
+  setIsSidebarOpen,
+  isNonMobile
+}) => {
+  const { pathname } = useLocation();
+  const [active, setActive] = useState("");
+  const theme = useTheme();
+  const navigate=useNavigate();
+  useEffect(() => {
+      setActive(pathname.substring(1));
+  }, [pathname]);
 const navItems=[
   {
     text:"Dashboard",
     icon:<HomeOutlined/>
+  },
+  {
+    text: "Login",
+    icon: <Login />
   },
   {
     text:"Client Facing",
@@ -90,21 +108,6 @@ const navItems=[
     icon: <TrendingUpOutlined />,
   },
 ];
-const Sidebar = ({
-  user,
-  drawerWidth,
-  isSidebarOpen,
-  setIsSidebarOpen,
-  isNonMobile
-}) => {
-  const { pathname } = useLocation();
-  const [active, setActive] = useState("");
-  const navigate = useNavigate();
-  const theme = useTheme();
-
-  useEffect(() => {
-    setActive(pathname.substring(1));
-  }, [pathname]);
   return (
     <Box component="nav">
       {isSidebarOpen && (
