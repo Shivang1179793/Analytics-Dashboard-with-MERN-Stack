@@ -5,7 +5,7 @@ import { validates } from "../models/registration.js"
 import bcrypt from 'bcrypt';
 import Joi from 'joi';
 // login Route
-router.post("/login", async (req, res) => {
+router.post("/", async (req, res) => {
     try {
         const { error } = validate(req.body);
         if (error)
