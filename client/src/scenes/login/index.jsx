@@ -13,7 +13,7 @@ const Login = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const url = `${process.env.REACT_APP_BASE_URL}api/auth`;
+			const url = `${process.env.REACT_APP_BASE_URL}api/auth/`;
 			const { data: res } = await axios.post(url, data);
 			if (res.token) {
 				localStorage.setItem("token", res.token); // Save the token as a string
