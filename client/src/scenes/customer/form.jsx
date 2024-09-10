@@ -16,7 +16,7 @@ const AddCustomer = () => {
 
     const handleSubmit = () => {
             const token = localStorage.getItem('token'); // Get token from local storage or wherever it's stored
-            axios.post(`${process.env.REACT_APP_BASE_URL}customers/add`, {
+            axios.post(`${process.env.REACT_APP_BASE_URL}/customers/add`, {
                 name,
                 email,
                 phoneNumber,

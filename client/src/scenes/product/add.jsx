@@ -20,7 +20,7 @@ const AddProduct = () => {
       return;
     }
 
-    axios.post(`${process.env.REACT_APP_BASE_URL}products/addProduct`, 
+    axios.post(`${process.env.REACT_APP_BASE_URL}/products/addProduct`, 
       { name, price, description, supply, stat },
       { headers: { Authorization: `Bearer ${token}` } }  // Include token in Authorization header
     )

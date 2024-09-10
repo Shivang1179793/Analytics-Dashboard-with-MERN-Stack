@@ -12,7 +12,7 @@ const AddTransaction = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${process.env.REACT_APP_BASE_URL}api/transactions`, { name, product, cost }, {
+      await axios.post(`${process.env.REACT_APP_BASE_URL}/api/transactions`, { name, product, cost }, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`, // Use the token stored in localStorage
         },
