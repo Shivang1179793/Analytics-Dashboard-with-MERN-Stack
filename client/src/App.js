@@ -28,6 +28,7 @@ import Customerss from "scenes/customer/index";
 import Index from "scenes/usertransactions/index";
 import AddTransaction from "scenes/usertransactions/add";
 import UserGeography from "scenes/usergeography";
+import DailySales from "scenes/userdailysales";
 function App() {
   const mode = useSelector((state) => state.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -51,7 +52,7 @@ function App() {
               <Route path="/admin/transactions" element={<Index />} />
               <Route path="/admin/geography" element={<UserGeography />} />
               <Route path="/admin/overview" element={<Main />} />
-              <Route path="/admin/daily" element={<Main />} />
+              <Route path="/admin/daily" element={<DailySales />} />
               <Route path="/admin/monthly" element={<Main />} />
               <Route path="/admin/breakdown" element={<Main />} />
             </Route>

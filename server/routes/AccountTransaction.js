@@ -55,4 +55,31 @@ router.delete('/transactions/:id', authenticateToken, async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+router.get('/transaction-fields', authenticateToken, async (req, res) => {
+    const { page = 0, pageSize = 20, sort = {}, search = "" } = req.query;
+    const query = { userId: req.user._id };
+
+    if (search) {
+        query.product = { $regex: search, $options: 'i' }; // Search by product name
+    }
+
+    try {
+        const transactions = await UserTransaction.find(query)
+            .sort(sort)
+            .skip(page * pageSize)
+            .limit(Number(pageSize));
+
+        // Format the data to include only product, cost, and createdAt
+        const formattedTransactions = transactions.map(transaction => ({
+            product: transaction.product,
+            cost: transaction.cost,
+            createdAt: transaction.createdAt.toISOString(), // Convert to ISO string
+        }));
+
+        const total = await UserTransaction.countDocuments(query);
+        res.json({ transactions: formattedTransactions, total });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 export default router;
