@@ -32,7 +32,6 @@ const Daily = () => {
   // Format the fetched data for the chart
   const [formattedData] = useMemo(() => {
     if (!data) return [];
-
     const totalCostLine = {
       id: "totalCost",
       color: theme.palette.secondary.main,
