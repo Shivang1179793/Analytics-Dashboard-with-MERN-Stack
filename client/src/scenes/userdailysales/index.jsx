@@ -1,96 +1,72 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Box, useTheme } from "@mui/material";
 import Header from "components/Header";
 import { ResponsiveLine } from "@nivo/line";
 import DatePicker from "react-datepicker";
+import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 
 const Daily = () => {
   const [startDate, setStartDate] = useState(new Date("2021-02-01"));
   const [endDate, setEndDate] = useState(new Date("2021-03-01"));
+  const [data, setData] = useState(null); // State to hold API data
   const theme = useTheme();
 
-  const [formattedData, setFormattedData] = useState([]);
-
-  // Function to format date in "dd-mm" format
-  const formatDate = (date) => {
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-    return `${day}-${month}`;
-  };
-
-  // Function to fetch data from the API
-  const fetchData = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/api/transaction-fields?page=0&pageSize=20`,
-        {
+  // Fetch data from API when the component mounts
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/transaction-fields`, {
           headers: {
-            Authorization: `Bearer ${token}`, // Add the JWT token to the headers
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        });
+        setData(response.data.transactions); // Set the fetched data
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
-
-      const { transactions } = await response.json();
-
-      const totalSalesLine = {
-        id: "totalSales",
-        color: theme.palette.secondary.main,
-        data: [],
-      };
-
-      const totalProductsLine = {
-        id: "totalProducts",
-        color: theme.palette.secondary[600],
-        data: [],
-      };
-
-      transactions.forEach(({ createdAt, cost, product }) => {
-        if (createdAt && cost !== undefined && product !== undefined) {
-          const dateFormatted = new Date(createdAt);
-
-          // Check if the date is within the selected range
-          if (dateFormatted >= startDate && dateFormatted <= endDate) {
-            const splitDate = formatDate(dateFormatted);
-            const productInt = parseInt(product, 10);
-
-            // Ensure that both x and y values are valid before pushing
-            if (!isNaN(productInt) && cost !== null) {
-              totalSalesLine.data.push({ x: splitDate, y: cost || 0 });
-              totalProductsLine.data.push({ x: splitDate, y: productInt || 0 });
-            } else {
-              console.warn(
-                `Skipped invalid data: product = ${product}, cost = ${cost}, createdAt = ${createdAt}`
-              );
-            }
-          }
-        }
-      });
-
-      // Check if the data is valid before updating the state
-      if (totalSalesLine.data.length > 0 && totalProductsLine.data.length > 0) {
-        setFormattedData([totalSalesLine, totalProductsLine]);
-      } else {
-        console.warn("No valid data to display in the chart");
-      }
-    } catch (error) {
-      console.error("Error fetching transaction data:", error);
-    }
-  };
-
-  // Use useEffect to call fetchData initially and on date changes
-  useMemo(() => {
+    };
     fetchData();
-  }, [startDate, endDate]); // Fetch data whenever startDate or endDate changes
+  }, [startDate, endDate]); // Re-fetch when date range changes
+
+  // Format the fetched data for the chart
+  const [formattedData] = useMemo(() => {
+    if (!data) return [];
+
+    const totalCostLine = {
+      id: "totalCost",
+      color: theme.palette.secondary.main,
+      data: [],
+    };
+    const totalProductLine = {
+      id: "totalProduct",
+      color: theme.palette.secondary[600],
+      data: [],
+    };
+
+    data.forEach(({ createdAt, cost, product }) => {
+      const dateFormatted = new Date(createdAt);
+      if (dateFormatted >= startDate && dateFormatted <= endDate) {
+        const splitDate = createdAt.substring(createdAt.indexOf("-") + 1);
+
+        totalCostLine.data = [
+          ...totalCostLine.data,
+          { x: splitDate, y: cost }, // Use cost as y
+        ];
+        totalProductLine.data = [
+          ...totalProductLine.data,
+          { x: splitDate, y: parseInt(product, 10) }, // Convert product to integer
+        ];
+      }
+    });
+
+    const formattedData = [totalCostLine, totalProductLine];
+    return [formattedData];
+  }, [data, startDate, endDate]); // Re-compute when data or dates change
 
   return (
     <Box m="1.5rem 2.5rem">
-      <Header title="DAILY SALES" subtitle="Chart of daily sales and products" />
+      <Header title="DAILY TRANSACTIONS" subtitle="Chart of daily transactions" />
       <Box height="75vh">
         <Box display="flex" justifyContent="flex-end">
           <Box>
@@ -114,23 +90,40 @@ const Daily = () => {
           </Box>
         </Box>
 
-        {formattedData.length ? (
+        {data ? (
           <ResponsiveLine
             data={formattedData}
             theme={{
               axis: {
-                domain: { line: { stroke: theme.palette.secondary[200] } },
-                legend: { text: { fill: theme.palette.secondary[200] } },
+                domain: {
+                  line: {
+                    stroke: theme.palette.secondary[200],
+                  },
+                },
+                legend: {
+                  text: {
+                    fill: theme.palette.secondary[200],
+                  },
+                },
                 ticks: {
-                  line: { stroke: theme.palette.secondary[200], strokeWidth: 1 },
-                  text: { fill: theme.palette.secondary[200] },
+                  line: {
+                    stroke: theme.palette.secondary[200],
+                    strokeWidth: 1,
+                  },
+                  text: {
+                    fill: theme.palette.secondary[200],
+                  },
                 },
               },
               legends: {
-                text: { fill: theme.palette.secondary[200] },
+                text: {
+                  fill: theme.palette.secondary[200],
+                },
               },
               tooltip: {
-                container: { color: theme.palette.primary.main },
+                container: {
+                  color: theme.palette.primary.main,
+                },
               },
             }}
             colors={{ datum: "color" }}
@@ -152,7 +145,7 @@ const Daily = () => {
               tickSize: 5,
               tickPadding: 5,
               tickRotation: 90,
-              legend: "Date",
+              legend: "Month",
               legendOffset: 60,
               legendPosition: "middle",
             }}
@@ -161,7 +154,7 @@ const Daily = () => {
               tickSize: 5,
               tickPadding: 5,
               tickRotation: 0,
-              legend: "Value",
+              legend: "Total",
               legendOffset: -50,
               legendPosition: "middle",
             }}
