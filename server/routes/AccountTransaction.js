@@ -16,13 +16,18 @@ function authenticateToken(req, res, next) {
 // Create a transaction
 router.post('/transactions', authenticateToken, async (req, res) => {
     try {
-        const transaction = new UserTransaction({ ...req.body, userId: req.user._id });
+        const transaction = new UserTransaction({
+            ...req.body,
+            userId: req.user._id,
+            createdAt: req.body.createdAt || Date.now()  // Use provided date or current date
+        });
         await transaction.save();
         res.status(201).json(transaction);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 });
+
 
 // Get transactions for a user
 router.get('/transactions', authenticateToken, async (req, res) => {

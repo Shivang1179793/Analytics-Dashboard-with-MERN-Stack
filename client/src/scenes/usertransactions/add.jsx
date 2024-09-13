@@ -7,14 +7,16 @@ const AddTransaction = () => {
   const [name, setName] = useState('');
   const [product, setProduct] = useState('');
   const [cost, setCost] = useState('');
+  const [date, setDate] = useState(''); // State for date
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${process.env.REACT_APP_BASE_URL}/api/transactions`, { name, product, cost }, {
+      await axios.post(`${process.env.REACT_APP_BASE_URL}/api/transactions`, 
+      { name, product, cost, createdAt: date }, {  // Send date as createdAt
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`, // Use the token stored in localStorage
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
       });
       navigate('/admin/transactions');
@@ -47,6 +49,17 @@ const AddTransaction = () => {
           type="number"
           value={cost}
           onChange={(e) => setCost(e.target.value)}
+        />
+        <TextField
+          label="Transaction Date"
+          fullWidth
+          margin="normal"
+          type="date"  // Input type as date
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
         <Button type="submit" variant="contained" color="primary">
           Add Transaction

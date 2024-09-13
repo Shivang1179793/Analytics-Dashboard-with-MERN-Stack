@@ -5,8 +5,7 @@ const transactionSchema = new mongoose.Schema({
     product: { type: String, required: true },
     cost: { type: Number, required: true },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'Registration', required: true },
-    createdAt: { type: Date, default: Date.now },
+    createdAt: { type: Date, default: Date.now }, // Use provided date or default
 }, { timestamps: true });
-
 const UserTransaction = mongoose.model('UserTransaction', transactionSchema);
 export default UserTransaction; 
