@@ -12,6 +12,13 @@ const Daily = () => {
 
   const [formattedData, setFormattedData] = useState([]);
 
+  // Function to format date in "dd-mm" format
+  const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    return `${day}-${month}`;
+  };
+
   // Function to fetch data from the API
   const fetchData = async () => {
     try {
@@ -46,12 +53,12 @@ const Daily = () => {
       transactions.forEach(({ createdAt, cost, product }) => {
         if (createdAt && cost !== undefined && product !== undefined) {
           const dateFormatted = new Date(createdAt);
-          
+
           // Check if the date is within the selected range
           if (dateFormatted >= startDate && dateFormatted <= endDate) {
-            const splitDate = dateFormatted.toISOString().split("T")[0];
+            const splitDate = formatDate(dateFormatted);
             const productInt = parseInt(product, 10);
-      
+
             // Ensure that both x and y values are valid before pushing
             if (!isNaN(productInt) && cost !== null) {
               totalSalesLine.data.push({ x: splitDate, y: cost || 0 });
