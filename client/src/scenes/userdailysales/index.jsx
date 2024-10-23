@@ -4,11 +4,10 @@ import Header from "components/Header";
 import { ResponsiveLine } from "@nivo/line";
 import DatePicker from "react-datepicker";
 import axios from "axios";
-import "react-datepicker/dist/react-datepicker.css";
-
+import "react-datepicker/dist/react-datepicker.css"; 
 const Daily = () => {
-  const [startDate, setStartDate] = useState(new Date("2021-02-01"));
-  const [endDate, setEndDate] = useState(new Date("2021-03-01"));
+  const [startDate, setStartDate] = useState(new Date("2024-01-01"));
+  const [endDate, setEndDate] = useState(new Date("2024-12-31"));
   const [data, setData] = useState(null); // State to hold API data
   const theme = useTheme();
 
@@ -45,20 +44,36 @@ const Daily = () => {
 
     data.forEach(({ createdAt, cost, product }) => {
       const dateFormatted = new Date(createdAt);
+      // Format date to 'dd-mm-yyyy'
+      const day = String(dateFormatted.getDate()).padStart(2, '0');  // Get day with leading zero
+      const month = String(dateFormatted.getMonth() + 1).padStart(2, '0');  // Get month with leading zero (0-indexed)
+      const year = dateFormatted.getFullYear();  // Get full year
+    
+      const formattedDate = `${day}-${month}-${year}`;  // Combine into 'dd-mm-yyyy'
+    
+      // Use formattedDate in your data processing
+      
       if (dateFormatted >= startDate && dateFormatted <= endDate) {
-        const splitDate = createdAt.substring(createdAt.indexOf("-") + 1);
-
         totalCostLine.data = [
           ...totalCostLine.data,
-          { x: splitDate, y: cost }, // Use cost as y
+          { x: formattedDate, y: cost },
         ];
         totalProductLine.data = [
           ...totalProductLine.data,
-          { x: splitDate, y: parseInt(product, 10) }, // Convert product to integer
+          { x: formattedDate, y: parseInt(product, 10) },
         ];
       }
-    });
-
+      else {
+        totalCostLine.data = [
+          ...totalCostLine.data,
+          { x: 0, y: 0 },
+        ];
+        totalProductLine.data = [
+          ...totalProductLine.data,
+          { x: 0, y: 0 },
+        ];
+      }
+    });    
     const formattedData = [totalCostLine, totalProductLine];
     return [formattedData];
   }, [data, startDate, endDate]); // Re-compute when data or dates change
