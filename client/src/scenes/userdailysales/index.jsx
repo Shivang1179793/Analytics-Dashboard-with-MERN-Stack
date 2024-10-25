@@ -32,12 +32,12 @@ const Daily = () => {
   const [formattedData] = useMemo(() => {
     if (!data) return [];
     const totalCostLine = {
-      id: "totalCost",
+      id: "totalSales",
       color: theme.palette.secondary.main,
       data: [],
     };
     const totalProductLine = {
-      id: "totalProduct",
+      id: "totalUnits",
       color: theme.palette.secondary[600],
       data: [],
     };
