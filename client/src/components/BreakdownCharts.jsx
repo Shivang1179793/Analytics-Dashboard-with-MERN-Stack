@@ -15,6 +15,7 @@ const BreakdownCharts = ({ transactions, yearlySalesTotal }) => {
   const formattedData = transactions.reduce((acc, { name, cost }) => {
     const category = acc.find((item) => item.id === name);
     if (category) {
+      console.log("category"+category.value);
       category.value += cost;
     } else {
       acc.push({
@@ -24,6 +25,7 @@ const BreakdownCharts = ({ transactions, yearlySalesTotal }) => {
         color: colors[acc.length % colors.length],
       });
     }
+    console.log("acc"+acc);
     return acc;
   }, []);
 
