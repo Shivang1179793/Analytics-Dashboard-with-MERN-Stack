@@ -14,7 +14,9 @@ const BreakdownSales = () => {
         const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/transaction-fields`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
+        console.log("Fetched transactions:", response.data.transactions); // Check data structure
         setTransactions(response.data.transactions);
+  
         const totalCost = response.data.transactions.reduce((acc, item) => acc + item.cost, 0);
         setYearlySalesTotal(totalCost);
       } catch (error) {
