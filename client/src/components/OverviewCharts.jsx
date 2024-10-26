@@ -7,18 +7,35 @@ const OverviewCharts = ({ data, view }) => {
 
   const [totalSalesLine, totalUnitsLine] = useMemo(() => {
     if (!data) return [];
-    const totalSalesLine = { id: "totalSales", color: theme.palette.secondary.main, data: [] };
-    const totalUnitsLine = { id: "totalUnits", color: theme.palette.secondary[600], data: [] };
+
+    const totalSalesData = {}; // To accumulate total sales per month
+    const totalUnitsData = {}; // To accumulate total units per month
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     data.forEach(({ createdAt, cost, product }) => {
       const dateFormatted = new Date(createdAt);
-      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       const month = monthNames[dateFormatted.getMonth()];
 
-      totalSalesLine.data.push({ x: month, y: cost });
-      totalUnitsLine.data.push({ x: month, y: parseInt(product, 10) });
+      // Aggregate sales
+      if (!totalSalesData[month]) totalSalesData[month] = 0;
+      totalSalesData[month] += cost;
+
+      // Aggregate units
+      if (!totalUnitsData[month]) totalUnitsData[month] = 0;
+      totalUnitsData[month] += parseInt(product, 10);
     });
-    
+
+    // Format data for Nivo chart
+    const totalSalesLine = { id: "Total Sales", color: theme.palette.secondary.main, data: [] };
+    const totalUnitsLine = { id: "Total Units", color: theme.palette.secondary[600], data: [] };
+
+    Object.keys(totalSalesData).forEach(month => {
+      totalSalesLine.data.push({ x: month, y: totalSalesData[month] });
+    });
+    Object.keys(totalUnitsData).forEach(month => {
+      totalUnitsLine.data.push({ x: month, y: totalUnitsData[month] });
+    });
+
     return [totalSalesLine, totalUnitsLine];
   }, [data, theme]);
 
