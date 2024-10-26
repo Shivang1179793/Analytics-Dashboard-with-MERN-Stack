@@ -31,6 +31,7 @@ import UserGeography from "scenes/usergeography";
 import DailySales from "scenes/userdailysales";
 import OverviewSales from "scenes/userOverview";
 import MonthlySales from "scenes/usermonthly";
+import BreakdownSales from "scenes/userbreakdown";
 function App() {
   const mode = useSelector((state) => state.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -56,7 +57,7 @@ function App() {
               <Route path="/admin/overview" element={<OverviewSales />} />
               <Route path="/admin/daily" element={<DailySales />} />
               <Route path="/admin/monthly" element={<MonthlySales />} />
-              <Route path="/admin/breakdown" element={<Main />} />
+              <Route path="/admin/breakdown" element={<BreakdownSales />} />
             </Route>
             <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
