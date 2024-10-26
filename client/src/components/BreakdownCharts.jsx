@@ -12,26 +12,23 @@ const BreakdownCharts = ({ transactions, yearlySalesTotal }) => {
     theme.palette.secondary[700],
   ];
 
-  const formattedData = transactions.reduce((acc, { name, cost }, index) => {
-    const categoryIndex = acc.findIndex((item) => item.id === name);
-    if (categoryIndex !== -1) {
-      acc[categoryIndex].value += cost;
+  const formattedData = transactions.reduce((acc, { name, cost }) => {
+    const category = acc.find((item) => item.id === name);
+    if (category) {
+      category.value += cost;
     } else {
       acc.push({
         id: name,
         label: name,
         value: cost,
-        color: colors[index % colors.length],
+        color: colors[acc.length % colors.length],
       });
     }
     return acc;
   }, []);
 
   return (
-    <Box
-      height="100%"
-      position="relative"
-    >
+    <Box height="100%" position="relative">
       <ResponsivePie
         data={formattedData}
         theme={{
