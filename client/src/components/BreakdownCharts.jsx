@@ -13,9 +13,13 @@ const BreakdownCharts = ({ transactions, yearlySalesTotal }) => {
   ];
 
   const formattedData = transactions.reduce((acc, { name, cost }) => {
+    if (!name || typeof cost !== 'number') {
+      console.warn("Skipping invalid entry:", { name, cost });
+      return acc;
+    }
+  
     const category = acc.find((item) => item.id === name);
     if (category) {
-      console.log("category"+category.value);
       category.value += cost;
     } else {
       acc.push({
@@ -25,10 +29,11 @@ const BreakdownCharts = ({ transactions, yearlySalesTotal }) => {
         color: colors[acc.length % colors.length],
       });
     }
-    console.log("acc", JSON.stringify(acc, null, 2));
+    console.log("Current acc:", JSON.stringify(acc, null, 2));
     return acc;
   }, []);
-  console.log("formattedData:", JSON.stringify(formattedData, null, 2));
+  
+  console.log("Final formattedData:", JSON.stringify(formattedData, null, 2));
 
   return (
     <Box height="100%" position="relative">
