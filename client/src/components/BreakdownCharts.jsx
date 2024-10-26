@@ -12,12 +12,7 @@ const BreakdownCharts = ({ transactions, yearlySalesTotal }) => {
     theme.palette.secondary[700],
   ];
 
-  const formattedData = transactions.reduce((acc, { name, cost }) => {
-    if (!name || typeof cost !== 'number') {
-      console.warn("Skipping invalid entry:", { name, cost });
-      return acc;
-    }
-  
+  const formattedData = transactions.reduce((acc, { name, cost }) => {  
     const category = acc.find((item) => item.id === name);
     if (category) {
       category.value += cost;
@@ -29,12 +24,8 @@ const BreakdownCharts = ({ transactions, yearlySalesTotal }) => {
         color: colors[acc.length % colors.length],
       });
     }
-    console.log("Current acc:", JSON.stringify(acc, null, 2));
     return acc;
   }, []);
-  
-  console.log("Final formattedData:", JSON.stringify(formattedData, null, 2));
-
   return (
     <Box height="100%" position="relative">
       <ResponsivePie
