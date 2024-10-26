@@ -76,6 +76,7 @@ router.get('/transaction-fields', authenticateToken, async (req, res) => {
 
         // Format the data to include only product, cost, and createdAt
         const formattedTransactions = transactions.map(transaction => ({
+            name: transaction.name,
             product: transaction.product,
             cost: transaction.cost,
             createdAt: transaction.createdAt.toISOString(), // Convert to ISO string
