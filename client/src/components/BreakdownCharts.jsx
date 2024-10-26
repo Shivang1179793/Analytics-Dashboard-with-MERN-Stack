@@ -25,9 +25,10 @@ const BreakdownCharts = ({ transactions, yearlySalesTotal }) => {
         color: colors[acc.length % colors.length],
       });
     }
-    console.log("acc"+acc);
+    console.log("acc", JSON.stringify(acc, null, 2));
     return acc;
   }, []);
+  console.log("formattedData:", JSON.stringify(formattedData, null, 2));
 
   return (
     <Box height="100%" position="relative">
