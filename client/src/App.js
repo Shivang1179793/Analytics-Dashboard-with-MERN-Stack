@@ -18,7 +18,7 @@ import Admin from "scenes/admin"
 import Performance from "scenes/performance";
 import Login from "scenes/login";
 import Signup from "scenes/Signup";
-import Main from "scenes/product";
+import Main from "scenes/main";
 import Layouts from "scenes/layouts";
 import Logout from "scenes/logout";
 import Product from "./scenes/product";
