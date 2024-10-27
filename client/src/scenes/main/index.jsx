@@ -43,13 +43,11 @@ const Main = () => {
       headerName: "# of Products",
       flex: 0.5,
       sortable: false,
-      renderCell: (params) => params.value.length,
     },
     {
       field: "cost",
       headerName: "Cost",
       flex: 1,
-      renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
     },
   ];
   const [transactionss, setTransactionss] = useState([]);
