@@ -182,7 +182,7 @@ const Main = () => {
           },
         }}>
           <DataGrid
-            loading={!setTransactionss.length}
+            loading={transactionss.length === 0}
             getRowId={(row)=>row._id}
             rows={transactionss}
             columns={columns}
