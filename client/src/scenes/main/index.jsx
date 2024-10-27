@@ -52,11 +52,10 @@ const Main = () => {
       renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
     },
   ];
-  const [transactions, setTransactions] = useState([]);
+  const [transactionss, setTransactionss] = useState([]);
   useEffect(() => {
     fetchTransactions();
   }, []);
-
   const fetchTransactions = async () => {
     try {
       const { data } = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/transactions`, {
@@ -64,7 +63,7 @@ const Main = () => {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      setTransactions(data.transactions);
+      setTransactionss(data.transactionss);
     } catch (error) {
       console.error('Error fetching transactions:', error);
     }
@@ -73,6 +72,24 @@ const Main = () => {
     const doc = new jsPDF();
     doc.text("Dashboard Report", 10, 10);
   };
+  const [yearlySalesTotal, setYearlySalesTotal] = useState(0);
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/transaction-fields`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        });
+        setTransactions(response.data.transactions);
+        const totalCost = response.data.transactions.reduce((acc, item) => acc + item.cost, 0);
+        setYearlySalesTotal(totalCost);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <Box m="1.5rem 2.5rem">
       <FlexBetween>
@@ -165,9 +182,9 @@ const Main = () => {
           },
         }}>
           <DataGrid
-            loading={!transactions.length}
+            loading={!setTransactionss.length}
             getRowId={(row)=>row._id}
-            rows={transactions}
+            rows={transactionss}
             columns={columns}
           />
         </Box>
@@ -183,7 +200,7 @@ const Main = () => {
         <Typography variant="h6" sx={{color:theme.palette.secondary[100]}}>
           Sales By Category
         </Typography>
-        <BreakdownCharts isDashboard={true}/>
+        <BreakdownCharts transactions={transactions} yearlySalesTotal={yearlySalesTotal} isDashboard={true} />
         <Typography p="0 0.6rem" fontSize="0.8rem" sx={{color:theme.palette.secondary[200]}}>
           Breakdown of real state and information via category for revenue made for this year and total sales.
         </Typography>
