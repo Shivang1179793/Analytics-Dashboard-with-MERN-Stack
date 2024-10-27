@@ -179,12 +179,12 @@ const Main = () => {
             color: `${theme.palette.secondary[200]} !important`,
           },
         }}>
-          <DataGrid
+          {/* <DataGrid
             loading={transactionss.length === 0}
             getRowId={(row)=>row._id}
             rows={transactionss}
             columns={columns}
-          />
+          /> */}
         </Box>
       </Box>
       <Box 
