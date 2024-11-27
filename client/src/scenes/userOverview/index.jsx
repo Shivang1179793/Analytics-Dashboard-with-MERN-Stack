@@ -3,7 +3,6 @@ import { Box, FormControl, MenuItem, InputLabel, Select } from "@mui/material";
 import OverviewCharts from "components/OverviewCharts";
 import Header from "components/Header";
 import axios from "axios";
-
 const OverviewSales = () => {
   const [view, setView] = useState("units");
   const [data, setData] = useState(null);
